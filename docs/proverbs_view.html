@@ -53,8 +53,8 @@
     align-items: center;
     font-size: 1.2rem;
     box-shadow: 0 4px 15px rgba(150, 180, 255, 0.2);
-    opacity: 0;
-    visibility: hidden;
+    /* opacity: 0; */
+    /* visibility: hidden; */
     transition: all 0.3s ease;
     z-index: 100;
 }
@@ -104,53 +104,57 @@
 </style>
 
 <script>
-// 1. スクロールに応じてトップへ戻るボタンの表示・非表示を切り替え
-const backToTopBtn = document.getElementById('backToTop');
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 300) {
-        backToTopBtn.classList.add('show');
-    } else {
-        backToTopBtn.classList.remove('show');
-    }
-});
-
-backToTopBtn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-// 2. 検索窓に入力された文字で箴言カードを絞り込む処理
-// ※各箴言を囲んでいる要素のクラス名が '.card' や '.item' の場合に動作します
-const searchInput = document.getElementById('searchInput');
-if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-        const keyword = e.target.value.toLowerCase();
-        // 各箴言のカード要素を指定（実際のクラス名に合わせて .card などを変更してください）
-        const cards = document.querySelectorAll('.card, .tweet, .post, .proverb-card');
-        
-        cards.forEach(card => {
-            const text = card.textContent.toLowerCase();
-            if (text.includes(keyword)) {
-                card.style.display = '';
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. TOPに戻るボタンの処理
+    const backToTopBtn = document.getElementById('backToTop');
+    if (backToTopBtn) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('show');
             } else {
-                card.style.display = 'none';
+                backToTopBtn.classList.remove('show');
             }
         });
-    });
-}
+
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // 2. キーワード検索機能（全件表示ベース）
+    const cards = document.querySelectorAll('.card, .tweet, .post, .proverb-card');
+    const searchInput = document.getElementById('searchInput');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const keyword = e.target.value.toLowerCase();
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(keyword)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    }
+});
 </script>
-</head>
-                
+
+</head>                
 <body>
         <h2 style="text-align: center; margin-top: 30px;">箴言集</h2>
                 ビア鯖アドベントカレンダー2026 2ndの生地です。<br/><br/>
                 あどみんの箴言を抽出するPythonスクリプトを生成AIで作成、抽出したjsonファイルをいい感じのHTMLにするPythonスクリプトを生成AIで作成。<br />
                 だいたい全自動で作られています。<br/> <br/>
 
-        <!-- 検索窓の配置例 -->
+        <!-- 検索窓の配置 -->
         <div class="search-container">
-            <input type="text" id="searchInput" class="search-input" placeholder="言葉を検索...">
+            <input type="text" id="searchInput" class="search-input" placeholder="ありがたい言葉を検索...">
         </div>
         
+        　　<!-- ここからカード -->
             <div class="card">
                 <div class="header">
                     <img class="avatar" src="https://media.mstdn.beer/accounts/avatars/000/000/001/original/02dce3636bfa1fd5.jpeg">
@@ -1697,6 +1701,7 @@ if (searchInput) {
                 <a class="link" href="https://mstdn.beer/@estpls/100620400794013450" target="_blank">元の投稿を表示 →</a>
             </div>
 
+
             <!-- ページトップへ戻るボタン（bodyの直前に置く） -->
-            <button id="backToTop" class="back-to-path back-to-top" title="トップへ戻る">↑</button>        
+            <button id="backToTop" class="back-to-top back-to-path" title="トップへ戻る">↑</button>        
             </body></html>
