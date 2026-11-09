@@ -13,6 +13,60 @@
             .link:hover { border-bottom: 1px solid #71b1ff; }
             hr { border: 0; border-top: 1px solid #333; margin: 40px 0; }
 
+/* 検索窓のスタイル */
+.search-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+.search-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid rgba(150, 180, 255, 0.3);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    font-size: 1rem;
+    color: var(--text, #4a5870);
+    outline: none;
+}
+.search-input:focus {
+    border-color: #9fdfff;
+    box-shadow: 0 0 8px rgba(159, 223, 255, 0.4);
+}
+
+/* ページトップへ戻るボタンのスタイル */
+.back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    color: #4a5870;
+    border: 1px solid rgba(150, 180, 255, 0.4);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 15px rgba(150, 180, 255, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+.back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+}
+.back-to-top:hover {
+    background: #eef8ff;
+    transform: translateY(-2px);
+}
+                
 /* ==========================================
    📱 スマホ実機用の調整 (画面幅768px以下)
    ========================================== */
@@ -47,12 +101,55 @@
         font-size: 0.8rem !important;
     }
 }
-        </style>
-        </head><body>
+</style>
+
+<script>
+// 1. スクロールに応じてトップへ戻るボタンの表示・非表示を切り替え
+const backToTopBtn = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+    } else {
+        backToTopBtn.classList.remove('show');
+    }
+});
+
+backToTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// 2. 検索窓に入力された文字で箴言カードを絞り込む処理
+// ※各箴言を囲んでいる要素のクラス名が '.card' や '.item' の場合に動作します
+const searchInput = document.getElementById('searchInput');
+if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+        const keyword = e.target.value.toLowerCase();
+        // 各箴言のカード要素を指定（実際のクラス名に合わせて .card などを変更してください）
+        const cards = document.querySelectorAll('.card, .tweet, .post, .proverb-card');
+        
+        cards.forEach(card => {
+            const text = card.textContent.toLowerCase();
+            if (text.includes(keyword)) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+}
+</script>
+</head>
+                
+<body>
         <h2 style="text-align: center; margin-top: 30px;">箴言集</h2>
                 ビア鯖アドベントカレンダー2026 2ndの生地です。<br/><br/>
                 あどみんの箴言を抽出するPythonスクリプトを生成AIで作成、抽出したjsonファイルをいい感じのHTMLにするPythonスクリプトを生成AIで作成。<br />
                 だいたい全自動で作られています。<br/> <br/>
+
+        <!-- 検索窓の配置例 -->
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="言葉を検索...">
+        </div>
         
             <div class="card">
                 <div class="header">
@@ -1599,4 +1696,7 @@
                 <div class="content">いつだって世界のどこかは午後5時を迎えている。#箴言</div>
                 <a class="link" href="https://mstdn.beer/@estpls/100620400794013450" target="_blank">元の投稿を表示 →</a>
             </div>
+
+            <!-- ページトップへ戻るボタン（bodyの直前に置く） -->
+            <button id="backToTop" class="back-to-path back-to-top" title="トップへ戻る">↑</button>        
             </body></html>
